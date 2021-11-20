@@ -1,0 +1,21 @@
+name: Build
+
+on: workflow_dispatch
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: autogen
+        run: ./autogen.sh
+      - name: configure
+        run: ./configure --prefix=$GITHUB_WORKSPACE/valgrind
+      - name: make
+        run: make
+      - name: install
+        run: make install
+      - uses: actions/upload-artifact@v2
+        with:
+          name: valgrind
+          path: ${{github.workspace}}/valgrind
